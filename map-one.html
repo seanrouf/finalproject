@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica Neue', Helvetica, Sans-serif;
+}
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+h1 {
+  font-size: 25px;
+  line-height: 30px;
+  Color: #052026;
+  text-align: center;
+}
+
+h2 {
+  font-size: 14px;
+  line-height: 16px;
+  margin-bottom: 1px;
+}
+h3 {
+  margin: 0px;
+  line-height: 10px;
+  font-size: 5px;
+}
+
+
+h4 {
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 5px;
+
+}
+
+h5 {
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+}
+
+h6 {
+  font-size: 10px;
+  line-height: 20px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: #71D9CE;
+}
+
+#console {
+  position: absolute;
+  border-radius: 10px;
+  width: 240px;
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.781);
+}
+
+
+#features {
+  top: 0;
+  height: 80px;
+  margin-top: 20px;
+  width: 400px;
+}
+
+.map-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  margin-right: 20px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  overflow: auto;
+  border-radius: 10px;
+}
+
+#features {
+  top: 0;
+  height: 80px;
+  margin-top: 20px;
+  width: 400px;
+}
+
+#legend {
+  padding: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 18px;
+  height: 150px;
+  margin-bottom: 40px;
+  width: 120px;
+}
+
+.legend-key {
+  display: inline-block;
+  border-radius: 20%;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+
+}
+</style>
+
+<style>
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 13px;
+}
+
+ul.ks-cboxtags {
+    list-style: none;
+    ;
+}
+ul.ks-cboxtags li{
+  display: inline;
+}
+ul.ks-cboxtags li label{
+    display: inline-block;
+    background-color: rgba(255, 255, 255, .9);
+    border: 2px solid rgba(139, 139, 139, .3);
+    color: #adadad;
+    border-radius: 10px;
+    white-space: nowrap;
+    margin: 3px 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all .2s;
+}
+
+ul.ks-cboxtags li label {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+ul.ks-cboxtags li label::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Helvetica Neue';
+    font-weight: 900;
+    font-size: 12px;
+    padding: 2px 6px 2px 2px;
+}
+
+
+ul.ks-cboxtags li input[type="checkbox"]:checked + label {
+    border: 2px solid rgb(255, 131, 103);
+    background-color: #F25E3D;
+    color: #fff;
+    transition: all .2s;
+}
+
+ul.ks-cboxtags li input[type="checkbox"] {
+  display: absolute;
+}
+ul.ks-cboxtags li input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+ul.ks-cboxtags li input[type="checkbox"]:focus + label {
+  border: 2px solid #71D9CE;
+}
+
+</style>
+<div id='map'></div>
+<div id='console'>
+  <h1>Total Volcanoes Globally</h1>
+  <p>This map shows the total distribution of all known Volcanoes. Feel free to click on each
+    individual volcano to display its name, Risk Level and Hazad Level.
+  </p>
+  <div class='container'>
+    <ul class="ks-cboxtags">
+      <li><input type="checkbox" id="checkboxOne"><label for="checkboxOne">Assessed Volcanoes Only</label></li>
+    </ul>
+    </div>
+  </div>
+  <div class='map-overlay' id='legend'><h2># of Volcanoes per Cluster</h2></div>
+</head>
+<body>
+
+    
+<style>
+.mapboxgl-popup {
+  max-width: 400px;
+  font: 12px/20px 'Helvetica Neue', Helvetica, sans-serif;
+  }
+.marker {
+  background-image: url('mapbox-icon.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+</style>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiZXppemljIiwiYSI6ImNrNms2aG9pbzAxM3gzZW1jd3RzcTgybTAifQ.NCuMB0JAaNAzgnUQoJUPRw';
+
+var map = new mapboxgl.Map({
+container: 'map', // container id
+style: 'mapbox://styles/ezizic/ck8rqor2n02o21ip9u95vzkm3', //hosted style id
+center: [-140, 46], // starting position
+zoom: 1 // starting zoom
+})
+
+//zoom controls
+map.addControl(new mapboxgl.NavigationControl());
+
+var layers = ['<10 ', '10 - 30', '30-50', '50-70', '70-100','100+'];
+var colors = ['#fef0d9', '#fdcc8a', '#fc8d59', '#fc8d59', '#b30000','#990000'];
+for (i = 0; i < layers.length; i++) {
+  var layer = layers[i];
+  var color = colors[i];
+  var item = document.createElement('div');
+  var key = document.createElement('span');
+  key.className = 'legend-key';
+  key.style.backgroundColor = color;
+
+  var value = document.createElement('span');
+  value.innerHTML = layer;
+  item.appendChild(key);
+  item.appendChild(value);
+  legend.appendChild(item);
+
+};
+
+map.on('load', function()  {
+
+
+
+map.addSource('volcanoesDataClust',{
+  'type':'geojson',
+  'data': 'https://raw.githubusercontent.com/seanrouf/finalproject/master/volcano.geojson',
+  'cluster':true,
+  'clusterRadius': 40,
+});
+
+map.addSource('volcanoesData', {
+  'type': 'geojson',
+  'data': 'https://raw.githubusercontent.com/seanrouf/finalproject/master/volcano.geojson',
+});
+
+})
+
+map.on('load', function() {
+
+map.addLayer({
+  id: 'volcanoesHeat',
+  type:'heatmap',
+  source:'volcanoesData',
+  paint: {
+        // increase weight as diameter breast height increases
+        /*
+        'heatmap-weight': {
+      type: 'exponential',
+      stops: [
+        [1, 0],
+        [23000, 1]
+      ]
+    },*/
+    // increase intensity as zoom level increases
+    // assign color values be applied to points depending on their density
+    'heatmap-color': [
+      'interpolate',
+      ['linear'],
+      ['heatmap-density'],
+      0, 'rgba(255,255,178,0)',
+      0.2, 'rgb(254,204,92)',
+      0.5, 'rgb(253,141,60)',
+      0.8, 'rgb(240,59,32)',
+      1, 'rgb(189,0,38)'
+    ],
+    // increase radius as zoom increases
+    'heatmap-radius': {
+      stops: [
+        [11, 9],
+        [15, 20]
+      ]
+    },
+    // decrease opacity to transition into the circle layer
+    'heatmap-opacity': {
+      default: 1,
+      stops: [
+        [14, 1],
+        [15, 0]
+      ]
+    },
+  }
+}, 'waterway-label');
+
+map.addLayer({
+  'id': 'assessed-volcanoes',
+  'type':'symbol',
+  'source':'volcanoesData',
+  'filter':['all', ["!=", "risk", "NULL" ]],
+  'layout': {
+      'icon-image': ['concat','mountain','-15'],
+      
+  }
+
+})
+
+map.addLayer({
+  'id': 'unclustered-volcanoes',
+  'type':'symbol',
+  'source':'volcanoesDataClust',
+  'layout': {
+      'icon-image': ['concat','mountain','-15'],
+      
+  }
+
+})
+
+  map.addLayer({
+    id: 'clusters',
+    type: 'circle',
+    source: 'volcanoesDataClust',
+    filter: ['has', 'point_count'],
+    paint: {
+      'circle-color': [
+        'step',
+        ['get', 'point_count'],
+        'rgba(254,240,217,0.7)',
+        10,
+        'rgba(253,204,138,0.7)',
+        30,
+        'rgba(252, 141, 89, 0.7)',
+        50,
+        'rgba(227, 74, 51, 0.7)',
+        70,
+        'rgba(179, 0, 0, 0.7)',
+        100,
+        'rgba(153, 0, 0, 0.7)'
+        ],
+      'circle-radius': [
+        'step',
+        ['get', 'point_count'],
+        10,
+        10,
+        12,
+        30,
+        15,
+        50,
+        20, 
+        70,
+        25,
+        100,
+        30
+    ]
+  }
+})
+
+
+  map.addLayer({
+    id: 'cluster-count',
+    type: 'symbol',
+    source: 'volcanoesDataClust',
+    filter: ['has', 'point_count'],
+  layout: {
+    'text-field': '{point_count_abbreviated}',
+    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    'text-size': 12
+}
+});
+
+
+
+})
+
+map.on('click', 'clusters', function(e){
+  map.flyTo ({ center: e.features[0].geometry.coordinates })
+})
+
+map.on('click', 'unclustered-volcanoes', function(e) {
+    map.flyTo({ center: e.features[0].geometry.coordinates })
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var hazard = e.features[0].properties.hazard;
+    var risk = e.features[0].properties.risk;
+    var name = e.features[0].properties.V_Name;
+    var country = e.features[0].properties.Country;
+  
+
+while (Math.abs(e.lngLat.lng - coordinates[0]) > 180){
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360
+    : -360;}    
+
+    new mapboxgl.Popup({offset:15})
+    .setLngLat(coordinates)
+    .setHTML( '<h2>' + name + '</h2>' + '<h3>' + coordinates + '</h3>' + '<h9>' + 'Country: '+ country + '<br/>' + 'Risk Level: ' + risk + '<br/>' + 'Hazard Level: ' + hazard )
+    .addTo(map);
+
+});
+
+var cB1 = document.getElementById('checkboxOne');
+
+
+console.log(cB1)
+
+
+cB1.addEventListener('change', function(){
+
+  if (cB1.checked === true) {
+    filterVolcanoes = ["!=", "risk", "NULL" ];
+      map.setLayoutProperty('clusters', 'visibility', 'none');
+      map.setLayoutProperty('cluster-count', 'visibility', 'none');
+      map.setLayoutProperty('unclustered-volcanoes', 'visibility', 'none');
+      map.setLayoutProperty('assessed-volcanoes', 'visibility', 'active');
+  } else {
+    filterVolcanoes = ["all"];
+
+    map.setLayoutProperty('clusters', 'visibility', 'active');
+      map.setLayoutProperty('cluster-count', 'visibility', 'active');
+      map.setLayoutProperty('unclustered-volcanoes', 'visibility', 'active');
+  }
+ 
+
+  map.setFilter('volcanoesHeat',['all', filterVolcanoes])
+  map.setFilter('unclustered-volcanoes',['all', filterVolcanoes])
+});
+
+
+map.on('mouseenter','unclustered-volcanoes',
+function(){
+  map.getCanvas().style.cursor= 'pointer';
+});
+
+map.on('mouseleave', 'unclustered-volcanoes',
+function(){
+    map.getCanvas().style.cursor = '';
+    });
+
+    var popup = new mapboxgl.Popup({
+closeButton: false,
+closeOnClick: false
+});
+
+    map.on('mouseenter','clusters',
+function(e){
+  map.getCanvas().style.cursor= 'pointer';
+});
+
+map.on('mouseleave', 'clusters',
+function(){
+    map.getCanvas().style.cursor = '';
+    });
+</script>
+ 
+</body>
+</html>
