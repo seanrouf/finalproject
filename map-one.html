@@ -436,13 +436,13 @@ cB1.addEventListener('change', function(){
       map.setLayoutProperty('clusters', 'visibility', 'none');
       map.setLayoutProperty('cluster-count', 'visibility', 'none');
       map.setLayoutProperty('unclustered-volcanoes', 'visibility', 'none');
-      map.setLayoutProperty('assessed-volcanoes', 'visibility', 'active');
+      map.setLayoutProperty('assessed-volcanoes', 'visibility', 'visable');
   } else {
     filterVolcanoes = ["all"];
 
-    map.setLayoutProperty('clusters', 'visibility', 'active');
-      map.setLayoutProperty('cluster-count', 'visibility', 'active');
-      map.setLayoutProperty('unclustered-volcanoes', 'visibility', 'active');
+    map.setLayoutProperty('clusters', 'visibility', 'visable');
+    map.setLayoutProperty('cluster-count', 'visibility', 'visable');
+    map.setLayoutProperty('unclustered-volcanoes', 'visibility', 'visable');
   }
  
 
