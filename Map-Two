@@ -1,0 +1,211 @@
+<DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Exploring the Relationship between Volcanoes, Earthquakes, and Plate Tectonics</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css" rel="stylesheet" />
+  <script src='https://api.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js'></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <style>
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  h2,
+  h3 {
+    margin: 10px;
+    font-size: 1.2em;
+  }
+
+  h3 {
+    font-size: 1em;
+  }
+
+  p {
+    font-size: 0.85em;
+    margin: 10px;
+    text-align: left;
+  }
+  /* Create a position for the map on the page */
+  #map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+
+  /* Set rules for how the map overlays (information box ) will be displayed
+  on the page. */
+  .map-overlay {
+    position: absolute;
+    bottom: 0;
+    right: -5;
+    background: rgba(255, 255, 255, 0.8);
+    margin-right: 20px;
+    font-family: Helvetica, sans-serif;
+    overflow: auto;
+    border-radius: 3px;
+  }
+
+ .comment-overlay {
+    position: absolute;
+    bottom: 25;
+    right: 10;
+    background: rgba(255, 255, 255, 0.8);
+    margin-right: 200px;
+    font-family: Helvetica, sans-serif;
+    overflow: auto;
+    border-radius: 3px;
+  }
+
+
+  #features {
+    top: 10;
+    height: 240px;
+    margin-top: 20px;
+    width: 250px;
+  };
+
+  .mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica', Helvetica, Helvetica, sans-serif;
+  }
+
+
+</style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <div class='map-overlay' id='features'><h2><center>Exploring the Relationship between Volcanoes, Earthquakes, and Plate Tectonics<center/></h2><div id='pd'><p>In the toolbox below, select between the volcanoes, earthquakes, and fault line boxes to view or hide each feature. Explore the different combinations of data to visualize the spatial relationships of natural hazards with one another and plate tectonics.</p></div></div>
+  <div class='map-overlay' id='legend'></div>
+  <div class='comment-overlay' id='comments'><h2><center>Important Information about this Volcano<center/></h2></div>
+</body>
+
+//create the toggle box
+    <style>
+    #menu {
+    background: #fff;
+    position: absolute;
+    z-index: 1;
+    top: 280px;
+    right: 35px;
+    border-radius: 3px;
+    width: 120px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    font-family: 'Helvetica', sans-serif;
+    }
+
+    #menu a {
+    font-size: 13px;
+    color: #404040;
+    display: block;
+    margin: 0;
+    padding: 0;
+    padding: 10px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    text-align: center;
+    }
+
+    #menu a:last-child {
+    border: none;
+    }
+
+    #menu a:hover {
+      background-color: #f8f8f8;
+      color: #404040;
+    }
+
+    #menu a.active {
+      background-color: #7a6e5d;
+      color: #ffffff;
+    }
+
+    #menu a.active:hover {
+      background: #6e6354;
+    }
+    </style>
+
+
+    <nav id="menu"></nav>
+
+
+  <script>
+
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiZXppemljIiwiYSI6ImNrNms2aG9pbzAxM3gzZW1jd3RzcTgybTAifQ.NCuMB0JAaNAzgnUQoJUPRw';
+var map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/ezizic/ck8rrrf5113zu1iqgkg14kkx6', //hosted style id
+  center: [-108.69, 34.4], // starting position
+  zoom: 2// starting zoom
+});
+
+// on a click, check to see if we are clicking on a volcano, then if so, open a popup.
+
+
+map.on('click', function(e) {
+  var features = map.queryRenderedFeatures(e.point, {
+    layers: ['historical20significant20volc-4fbup8']
+  });
+
+  if (!features.length) {
+    return;
+  }
+
+  var feature = features[0];
+
+  document.getElementById("comments").innerHTML = feature. properties.COMMENTS
+
+  var popup = new mapboxgl.Popup({ offset: [0, -15] })
+  .setLngLat(feature.geometry.coordinates)
+  .setHTML('<h3>' + feature.properties.NAME + '</h3><p>' + feature.properties.MORPHOLOGY + '</p>')
+  .addTo(map);
+
+  map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+
+});
+
+// create toggle bar
+map.on()
+
+var toggleableLayerIds = [["Volcanoes", "historical20significant20volc-4fbup8"], ["Earthquakes", "1950-present-2407-events-dv3vms"], ["Fault Line", "fault-96ntac"]];
+for (var i = 0; i < toggleableLayerIds.length; i++) {
+  var id = toggleableLayerIds[i][1];
+  var link = document.createElement('a');
+  link.mapboxid = id;
+  link.href = '#';
+  link.className = 'active';
+  link.textContent = toggleableLayerIds [i][0];
+  link.onclick = function(e) {
+    var clickedLayer = this.mapboxid;
+    e.preventDefault();
+    e.stopPropagation();
+    var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+    if (visibility === 'visible') {
+      map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+      this.className = '';
+      console.log('Just made invisible: ', clickedLayer)
+    } else {
+      this.className = 'active';
+      map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+      console.log('Just made invisible: ', clickedLayer);
+    }
+  };
+  var layers = document.getElementById('menu');
+  layers.appendChild(link);
+}
+</script>
+</body>
+
+
+</script>
+</body>
+</html>
