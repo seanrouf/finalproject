@@ -426,6 +426,26 @@ while (Math.abs(e.lngLat.lng - coordinates[0]) > 180){
 
 });
 
+map.on('click', 'assessed-volcanoes', function(e) {
+    map.flyTo({ center: e.features[0].geometry.coordinates })
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var hazard = e.features[0].properties.hazard;
+    var risk = e.features[0].properties.risk;
+    var name = e.features[0].properties.V_Name;
+    var country = e.features[0].properties.Country;
+  
+
+while (Math.abs(e.lngLat.lng - coordinates[0]) > 180){
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360
+    : -360;}    
+
+    new mapboxgl.Popup({offset:15})
+    .setLngLat(coordinates)
+    .setHTML( '<h2>' + name + '</h2>' + '<h3>' + coordinates + '</h3>' + '<h9>' + 'Country: '+ country + '<br/>' + 'Risk Level: ' + risk + '<br/>' + 'Hazard Level: ' + hazard )
+    .addTo(map);
+
+});
+
 var cB1 = document.getElementById('checkboxOne');
 
 
@@ -460,6 +480,21 @@ function(){
 });
 
 map.on('mouseleave', 'unclustered-volcanoes',
+function(){
+    map.getCanvas().style.cursor = '';
+    });
+
+    var popup = new mapboxgl.Popup({
+closeButton: false,
+closeOnClick: false
+});
+
+map.on('mouseenter','assessed-volcanoes',
+function(){
+  map.getCanvas().style.cursor= 'pointer';
+});
+
+map.on('mouseleave', 'assessed-volcanoes',
 function(){
     map.getCanvas().style.cursor = '';
     });
