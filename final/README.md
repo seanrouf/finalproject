@@ -7,11 +7,11 @@ In this project we have two interactive maps that highlight volcanoes, but we fo
 
 The first map is to examine clustering of all volcanoes. We decided it was important to know what risk level these volcanoes posed. This is useful to assess our individual vulnerability, especially if we live nearby a volcano. 
 
-https://seanrouf.github.io/finalproject/final/map-one.html
+
 
 This image is a still of the map that shows a volcano in the far reaches of Norway  and it shows that the risk level and the hazard level are both defined at 1 on a 5 point scale. 
 ![alt text](https://seanrouf.github.io/finalproject/final/Annotation%202020-04-10%20195233.png "Logo Title Text 1")
-
+https://seanrouf.github.io/finalproject/final/map-one.html
 
 
 
