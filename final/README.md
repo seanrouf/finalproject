@@ -9,7 +9,7 @@ The first map is to examine clustering of all volcanoes. We decided it was impor
 https://seanrouf.github.io/finalproject/final/map-one.html
 
 This image is a still of the map that shows a volcano in Iceland, not far off of Rejkyavik, Iceland's most populated city, and it shows that the risk level and the hazard level are both defined at 2 on a 5 point scale. 
-![alt text](https://raw.githubusercontent.com/UBC-GEOB472-Spring2020/ezizic-web/master/Risk.png "Logo Title Text 1")
+![alt text](https://seanrouf.github.io/finalproject/final/Annotation%202020-04-10%20195233.png "Logo Title Text 1")
 
 
 
