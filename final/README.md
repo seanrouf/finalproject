@@ -22,7 +22,7 @@ The second map is to visualize historically significant volcanic eruptions in pr
 
  
  
-![alt text](https://raw.githubusercontent.com/UBC-GEOB472-Spring2020/ezizic-web/master/Earthquake_prox.png
+![alt text](https://raw.githubusercontent.com/UBC-GEOB472-Spring2020/ezizic-web/master/sinabung.png
  "Logo Title Text 1")
 
 https://seanrouf.github.io/finalproject/final/map-two.html
