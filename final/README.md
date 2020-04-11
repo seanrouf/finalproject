@@ -1,5 +1,6 @@
 # Final Project
 
+Map Essay: https://arcg.is/04y48b
 
 In this project we have two interactive maps that highlight volcanoes, but we focus on volcanoes in different capacities. 
 
@@ -8,7 +9,7 @@ The first map is to examine clustering of all volcanoes. We decided it was impor
 
 https://seanrouf.github.io/finalproject/final/map-one.html
 
-This image is a still of the map that shows a volcano in Iceland, not far off of Rejkyavik, Iceland's most populated city, and it shows that the risk level and the hazard level are both defined at 2 on a 5 point scale. 
+This image is a still of the map that shows a volcano in the far reaches of Norway  and it shows that the risk level and the hazard level are both defined at 1 on a 5 point scale. 
 ![alt text](https://seanrouf.github.io/finalproject/final/Annotation%202020-04-10%20195233.png "Logo Title Text 1")
 
 
